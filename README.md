@@ -1,12 +1,7 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
 
-# Run and deploy your AI Studio app
 
 This contains everything you need to run your app locally.
 
-View your app in AI Studio: https://ai.studio/apps/7196bee3-955c-4029-82e5-acc9f2bd59fc
 
 ## Run Locally
 
@@ -15,6 +10,13 @@ View your app in AI Studio: https://ai.studio/apps/7196bee3-955c-4029-82e5-acc9f
 
 1. Install dependencies:
    `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
+
+
+Account Role	Email Address	Password	Functionality
+
+Director (ADMIN)	admin@wealthfarm.ng	WealthFarm@2026	
+Full administrative control, asset publishing, order status updates, and task evidence audits.
+Investor (USER)	investor@wealthfarm.ng	WealthFarm@2026	
+Asset catalog inspection, order initiation, Paystack checkout, task submission, and learning access.
