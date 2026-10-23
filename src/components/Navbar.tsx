@@ -1,5 +1,7 @@
+//Navbar.tsx
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext.js';
+import { useToast } from '../context/ToastContext.js';
 import { Button } from './ui/Button.js';
 import { Sprout, User, Shield, LogOut, Menu, X, Bell } from 'lucide-react';
 
@@ -10,6 +12,7 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
   const { user, logout, quickSwitch } = useAuth();
+  const { toast } = useToast();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
@@ -26,6 +29,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
     navigate(path);
     setMobileMenuOpen(false);
     setProfileDropdownOpen(false);
+  };
+
+  const handleRoleSwitch = async (role: 'ADMIN' | 'USER') => {
+    try {
+      await quickSwitch(role);
+      handleNav(role === 'ADMIN' ? '/admin' : '/dashboard');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Unable to switch demo account.');
+    }
   };
 
   return (
@@ -53,11 +65,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
                   key={link.path}
                   type="button"
                   onClick={() => handleNav(link.path)}
-                  className={`transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                    isActive
-                      ? 'text-[#176B3A] font-semibold border-b-2 border-[#176B3A] py-1'
-                      : 'hover:text-[#17231C]'
-                  }`}
+                  className={`transition-colors whitespace-nowrap shrink-0 cursor-pointer ${isActive
+                    ? 'text-[#176B3A] font-semibold border-b-2 border-[#176B3A] py-1'
+                    : 'hover:text-[#17231C]'
+                    }`}
                   aria-current={isActive ? 'page' : undefined}
                 >
                   {link.label}
@@ -148,10 +159,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
                       </div>
                       <button
                         type="button"
-                        onClick={async () => {
-                          await quickSwitch(user.role === 'ADMIN' ? 'USER' : 'ADMIN');
-                          setProfileDropdownOpen(false);
-                        }}
+                        onClick={() => void handleRoleSwitch(user.role === 'ADMIN' ? 'USER' : 'ADMIN')}
                         className="w-full text-left px-4 py-1.5 text-neutral-600 hover:text-[#176B3A] hover:bg-neutral-50"
                       >
                         Switch to {user.role === 'ADMIN' ? 'Investor (USER)' : 'Director (ADMIN)'}
@@ -173,6 +181,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
                     </div>
                   </div>
                 )}
+                
               </div>
             ) : (
               <div className="flex items-center gap-2.5">
@@ -194,16 +203,20 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
           </div>
 
           {/* Mobile hamburger */}
-          <div className="flex md:hidden items-center gap-2">
+          <div className="flex lg:hidden items-center gap-2">
             <button
               type="button"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="flex h-11 w-11 items-center justify-center rounded-lg text-neutral-700 hover:bg-neutral-100 hover:text-[#176B3A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#16A34A]"
-            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={mobileMenuOpen}
-            aria-controls="mobile-navigation"
+              onClick={() => setMobileMenuOpen((open) => !open)}
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-neutral-700 transition-colors hover:bg-neutral-100 hover:text-[#176B3A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#16A34A] lg:hidden"
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? (
+                <X className="h-6 w-6" aria-hidden="true" />
+              ) : (
+                <Menu className="h-6 w-6" aria-hidden="true" />
+              )}
             </button>
           </div>
         </div>
@@ -213,7 +226,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
       {mobileMenuOpen && (
         <div
           id="mobile-navigation"
-          className="lg:hidden max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-t border-[#DCE8DF] bg-white px-3 pb-5 pt-3 sm:px-6 sm:pb-6"
+          className="max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-t border-[#DCE8DF] bg-white px-3 pb-5 pt-3 sm:px-6 sm:pb-6 lg:hidden"
         >
           <nav aria-label="Main navigation" className="flex flex-col gap-1">
             {navLinks.map((link) => (
@@ -221,11 +234,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
                 key={link.path}
                 type="button"
                 onClick={() => handleNav(link.path)}
-                className={`min-h-11 w-full rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors ${
-                  currentPath === link.path
-                    ? 'bg-[#EEF7F0] text-[#176B3A] font-semibold'
-                    : 'text-neutral-700 hover:bg-neutral-50'
-                }`}
+                className={`min-h-11 w-full rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors ${currentPath === link.path
+                  ? 'bg-[#EEF7F0] text-[#176B3A] font-semibold'
+                  : 'text-neutral-700 hover:bg-neutral-50'
+                  }`}
                 aria-current={currentPath === link.path ? 'page' : undefined}
               >
                 {link.label}
@@ -262,10 +274,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
                 )}
                 <button
                   type="button"
-                  onClick={async () => {
-                    await quickSwitch(user.role === 'ADMIN' ? 'USER' : 'ADMIN');
-                    setMobileMenuOpen(false);
-                  }}
+                  onClick={() => void handleRoleSwitch(user.role === 'ADMIN' ? 'USER' : 'ADMIN')}
                   className="min-h-11 w-full rounded-lg px-3 text-left text-sm text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-[#176B3A]"
                 >
                   Switch to {user.role === 'ADMIN' ? 'Investor (USER)' : 'Director (ADMIN)'}
