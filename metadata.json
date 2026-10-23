@@ -1,0 +1,8 @@
+{
+  "name": "WEALTHFARM - Institutional Wealth Creation & Enterprise Ecosystem",
+  "description": "WEALTHFARM is an integrated Nigerian business platform for commercial asset ownership, enterprise development, strategic logistics, verified operational tasks, and executive investment education.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

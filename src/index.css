@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --color-wealth-green: #176B3A;
+  --color-wealth-green-dark: #0F4927;
+  --color-wealth-green-light: #1E8E4D;
+  --color-wealth-accent: #16A34A;
+  --color-wealth-dark: #17231C;
+  --color-wealth-surface: #EEF7F0;
+  --color-wealth-muted: #526358;
+  --color-wealth-border: #DCE8DF;
+}
+
+:root {
+  font-family: var(--font-sans);
+  color: #17231C;
+  background-color: #F8FAF9;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ensure tabular numbers for metrics and money */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
