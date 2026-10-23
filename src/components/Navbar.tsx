@@ -183,6 +183,9 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
                 >
                   Sign In
                 </button>
+                <Button variant="secondary" size="sm" onClick={() => handleNav('/login')}>
+                  Demo Dashboards
+                </Button>
                 <Button variant="primary" size="sm" onClick={() => handleNav('/register')}>
                   Open Account
                 </Button>
@@ -287,6 +290,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
                 </Button>
                 <Button variant="primary" size="md" onClick={() => handleNav('/register')}>
                   Open Account
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="md"
+                  className="w-full sm:col-span-2"
+                  onClick={() => handleNav('/login')}
+                >
+                  Demo Dashboards
                 </Button>
               </div>
             )}
