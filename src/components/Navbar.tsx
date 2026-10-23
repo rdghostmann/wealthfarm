@@ -31,12 +31,12 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#DCE8DF]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between gap-8 h-16">
+        <div className="flex min-h-14 items-center justify-between gap-3 py-2 sm:min-h-16 sm:gap-6">
           {/* Zone 1: Single text wordmark */}
           <button
             type="button"
             onClick={() => handleNav('/')}
-            className="flex items-center gap-2.5 text-left text-lg font-extrabold tracking-tight text-[#17231C] whitespace-nowrap shrink-0 group cursor-pointer"
+            className="flex min-w-0 items-center gap-2 text-left text-base font-extrabold tracking-tight text-[#17231C] whitespace-nowrap shrink-0 group cursor-pointer sm:gap-2.5 sm:text-lg"
           >
             <div className="w-8 h-8 rounded-lg bg-[#176B3A] text-white flex items-center justify-center transition-transform group-hover:scale-105">
               <Sprout className="w-5 h-5" />
@@ -45,7 +45,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
           </button>
 
           {/* Zone 2: 4-5 single-line clean nav links */}
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-neutral-600">
+          <nav className="hidden lg:flex items-center gap-4 xl:gap-6 text-sm font-medium text-neutral-600">
             {navLinks.map((link) => {
               const isActive = currentPath === link.path;
               return (
@@ -58,6 +58,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
                       ? 'text-[#176B3A] font-semibold border-b-2 border-[#176B3A] py-1'
                       : 'hover:text-[#17231C]'
                   }`}
+                  aria-current={isActive ? 'page' : undefined}
                 >
                   {link.label}
                 </button>
@@ -66,7 +67,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
           </nav>
 
           {/* Zone 3: Primary action / profile */}
-          <div className="hidden md:flex items-center gap-3 shrink-0">
+          <div className="hidden lg:flex items-center gap-3 shrink-0">
             {user ? (
               <div className="relative">
                 <div className="flex items-center gap-2">
@@ -194,8 +195,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-neutral-700 hover:text-[#176B3A] rounded-lg"
-              aria-label="Toggle menu"
+            className="flex h-11 w-11 items-center justify-center rounded-lg text-neutral-700 hover:bg-neutral-100 hover:text-[#176B3A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#16A34A]"
+            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -205,49 +208,84 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-[#DCE8DF] bg-white px-4 pt-3 pb-6 space-y-3">
-          <nav className="flex flex-col space-y-2">
+        <div
+          id="mobile-navigation"
+          className="lg:hidden max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-t border-[#DCE8DF] bg-white px-3 pb-5 pt-3 sm:px-6 sm:pb-6"
+        >
+          <nav aria-label="Main navigation" className="flex flex-col gap-1">
             {navLinks.map((link) => (
               <button
                 key={link.path}
                 type="button"
                 onClick={() => handleNav(link.path)}
-                className={`text-left px-3 py-2 rounded-lg text-sm font-medium ${
+                className={`min-h-11 w-full rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors ${
                   currentPath === link.path
                     ? 'bg-[#EEF7F0] text-[#176B3A] font-semibold'
                     : 'text-neutral-700 hover:bg-neutral-50'
                 }`}
+                aria-current={currentPath === link.path ? 'page' : undefined}
               >
                 {link.label}
               </button>
             ))}
           </nav>
 
-          <div className="pt-4 border-t border-neutral-200">
+          <div className="mt-3 border-t border-neutral-200 pt-4">
             {user ? (
               <div className="space-y-2">
-                <div className="px-3 py-2 rounded-lg bg-neutral-50 text-xs">
-                  <div className="font-bold text-[#17231C]">{user.name}</div>
-                  <div className="text-neutral-500">{user.email} · {user.role}</div>
+                <div className="rounded-lg bg-neutral-50 px-3 py-2 text-xs">
+                  <div className="truncate font-bold text-[#17231C]">{user.name}</div>
+                  <div className="truncate text-neutral-500">{user.email} · {user.role}</div>
                 </div>
-                <Button variant="secondary" size="sm" className="w-full justify-start" onClick={() => handleNav('/dashboard')}>
+                <Button variant="secondary" size="md" className="w-full justify-start" onClick={() => handleNav('/dashboard')}>
                   Member Dashboard
                 </Button>
+                <Button variant="outline" size="md" className="w-full justify-start" onClick={() => handleNav('/dashboard/notifications')}>
+                  Notifications
+                </Button>
+                <Button variant="outline" size="md" className="w-full justify-start" onClick={() => handleNav('/dashboard/orders')}>
+                  Orders &amp; Invoices
+                </Button>
+                <Button variant="outline" size="md" className="w-full justify-start" onClick={() => handleNav('/dashboard/tasks')}>
+                  Field Tasks
+                </Button>
+                <Button variant="outline" size="md" className="w-full justify-start" onClick={() => handleNav('/dashboard/learning')}>
+                  My Courses
+                </Button>
                 {user.role === 'ADMIN' && (
-                  <Button variant="secondary" size="sm" className="w-full justify-start" onClick={() => handleNav('/admin')}>
+                  <Button variant="secondary" size="md" className="w-full justify-start" onClick={() => handleNav('/admin')}>
                     Admin Control Centre
                   </Button>
                 )}
-                <Button variant="outline" size="sm" className="w-full text-rose-600 border-rose-200 justify-start" onClick={logout}>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await quickSwitch(user.role === 'ADMIN' ? 'USER' : 'ADMIN');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="min-h-11 w-full rounded-lg px-3 text-left text-sm text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-[#176B3A]"
+                >
+                  Switch to {user.role === 'ADMIN' ? 'Investor (USER)' : 'Director (ADMIN)'}
+                </button>
+                <Button
+                  variant="outline"
+                  size="md"
+                  className="w-full justify-start border-rose-200 text-rose-600"
+                  onClick={() => {
+                    logout();
+                    handleNav('/login');
+                  }}
+                >
+                  <LogOut className="h-4 w-4" />
                   Sign Out
                 </Button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-2">
-                <Button variant="outline" size="sm" onClick={() => handleNav('/login')}>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                <Button variant="outline" size="md" onClick={() => handleNav('/login')}>
                   Sign In
                 </Button>
-                <Button variant="primary" size="sm" onClick={() => handleNav('/register')}>
+                <Button variant="primary" size="md" onClick={() => handleNav('/register')}>
                   Open Account
                 </Button>
               </div>
